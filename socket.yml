@@ -1,0 +1,23 @@
+# Socket.dev configuration for the public payfyio package.
+# https://docs.socket.dev/docs/socket-yml
+#
+# payfyio is, by design, an HTTP client for payment gateways. The alerts
+# below are expected for this kind of library and are triaged here so the
+# Socket GitHub app doesn't block PRs on them. Genuinely risky alert types
+# (malware, install scripts, protestware, typo-squats, etc.) are left ON.
+
+version: 2
+
+issueRules:
+  # payfyio's whole job is calling provider APIs over HTTPS.
+  networkAccess: false
+  # Provider endpoints + SOAP/XML namespaces are legitimate string literals.
+  urlStrings: false
+  # Reads proxy / provider credentials from the env in host apps.
+  envVars: false
+  # axios (the sole runtime dep) and its transitive tree touch the FS.
+  filesystemAccess: false
+  # "uses eval" / "unmaintained" notes originate from axios's dependency
+  # tree (e.g. asynckit, delayed-stream), not from payfyio's own source.
+  usesEval: false
+  unmaintained: false
